@@ -5,6 +5,7 @@ from typing import Callable, Deque, Optional, Protocol, Type
 
 from src.command import (
     Command,
+    EnqueueFrontCommand,
     LogExceptionCommand,
     RepeatOnceCommand,
     RepeatTwiceCommand,
@@ -96,7 +97,7 @@ class RepeatOnceStrategy:
 
     def handle(self, pair: ExceptionPair):
         command = RepeatOnceCommand(command=pair.source)
-        self._command_queue.appendleft(command)
+        EnqueueFrontCommand(self._command_queue, command).execute()
 
 
 class RepeatTwiceStrategy:
@@ -109,4 +110,4 @@ class RepeatTwiceStrategy:
 
     def handle(self, pair: ExceptionPair):
         command = RepeatTwiceCommand(command=pair.source)
-        self._command_queue.appendleft(command)
+        EnqueueFrontCommand(self._command_queue, command).execute()

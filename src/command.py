@@ -1,4 +1,4 @@
-from typing import Callable, Protocol
+from typing import Callable, Deque, Protocol
 
 
 class Command(Protocol):
@@ -6,6 +6,19 @@ class Command(Protocol):
         """
         Execute command
         """
+
+
+class EnqueueFrontCommand:
+    """
+    Puts another command into the command queue
+    """
+
+    def __init__(self, command_queue: Deque[Command], command: Command):
+        self._command = command
+        self._command_queue = command_queue
+
+    def execute(self):
+        self._command_queue.appendleft(self._command)
 
 
 class LogExceptionCommand:
